@@ -269,6 +269,33 @@ func (redis *Redis) CAA(name string, z *Zone, record *Record) (answers, extras [
 	return
 }
 
+func (redis *Redis) NAPTR(name string, z *Zone, record *Record) (answers, extras []dns.RR) {
+	if record == nil {
+		return
+	}
+	for _, naptr := range record.NAPTR {
+		if naptr.Replacement == "" && naptr.Regexp == "" {
+			continue
+		}
+		r := new(dns.NAPTR)
+		r.Hdr = dns.RR_Header{
+			Name:   dns.Fqdn(name),
+			Rrtype: dns.TypeNAPTR,
+			Class:  dns.ClassINET,
+			Ttl:    redis.minTtl(naptr.Ttl),
+		}
+		r.Order = naptr.Order
+		r.Preference = naptr.Preference
+		r.Flags = naptr.Flags
+		r.Service = naptr.Service
+		r.Regexp = naptr.Regexp
+		r.Replacement = naptr.Replacement
+
+		answers = append(answers, r)
+	}
+	return
+}
+
 func (redis *Redis) AXFR(z *Zone) (records []dns.RR) {
 	//soa, _ := redis.SOA(z.Name, z, record)
 	soa := make([]dns.RR, 0)
@@ -312,6 +339,10 @@ func (redis *Redis) AXFR(z *Zone) (records []dns.RR) {
 			extras = append(extras, xs...)
 
 			as, xs = redis.TXT(fqdnKey, z, record)
+			answers = append(answers, as...)
+			extras = append(extras, xs...)
+
+			as, xs = redis.NAPTR(fqdnKey, z, record)
 			answers = append(answers, as...)
 			extras = append(extras, xs...)
 		}

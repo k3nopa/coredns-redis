@@ -17,6 +17,7 @@ type Record struct {
 	SRV   []SRV_Record `json:"srv,omitempty"`
 	CAA   []CAA_Record `json:"caa,omitempty"`
 	SOA   SOA_Record `json:"soa,omitempty"`
+	NAPTR []NAPTR_Record `json:"naptr,omitempty"`
 }
 
 type A_Record struct {
@@ -72,4 +73,14 @@ type CAA_Record struct {
 	Flag  uint8 `json:"flag"`
 	Tag   string `json:"tag"`
 	Value string `json:"value"`
+}
+
+type NAPTR_Record struct {
+	Ttl         uint32 `json:"ttl,omitempty"`
+	Order       uint16 `json:"order"`
+	Preference  uint16 `json:"preference"`
+	Flags       string `json:"flags"`
+	Service     string `json:"service"`
+	Regexp      string `json:"regexp"`
+	Replacement string `json:"replacement"`
 }

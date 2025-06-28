@@ -96,6 +96,8 @@ func (redis *Redis) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.M
 		answers, extras = redis.SOA(qname, z, record)
 	case "CAA":
 		answers, extras = redis.CAA(qname, z, record)
+	case "NAPTR":
+		answers, extras = redis.NAPTR(qname, z, record)
 
 	default:
 		return redis.errorResponse(state, zone, dns.RcodeNotImplemented, nil)
