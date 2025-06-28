@@ -179,6 +179,22 @@ dns RRs are stored in redis as json strings inside a hash map using address as f
 }
 ~~~
 
+#### NAPTR
+
+~~~json
+{
+    "naptr":{
+        "order" : 100,
+        "preference" : 10,
+        "flags" : "u",
+        "service" : "E2U+sip",
+        "regexp" : "!^.*$!sip:info@example.com!",
+        "replacement" : "",
+        "ttl" : 360
+    }
+}
+~~~
+
 #### example
 
 ~~~
