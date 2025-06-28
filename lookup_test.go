@@ -43,6 +43,9 @@ var lookupEntries = [][][]string {
 			"{\"a\":[{\"ttl\":300, \"ip\":\"7.7.7.7\"}]," +
 			"\"aaaa\":[{\"ttl\":300, \"ip\":\"::1\"}]}",
 		},
+		{"naptr",
+			"{\"naptr\":[{\"ttl\":300, \"order\":100, \"preference\":10, \"flags\":\"u\", \"service\":\"E2U+sip\", \"regexp\":\"!^.*$!sip:info@example.com!\", \"replacement\":\"\"}]}",
+		},
 	},
 	// Example.net
 	{
@@ -157,6 +160,12 @@ var testCases = [][]test.Case{
 			Qname: "example.com.", Qtype: dns.TypeSOA,
 			Answer: []dns.RR{
 				test.SOA("example.com. 300 IN SOA ns1.example.com. hostmaster.example.com. 1460498836 44 55 66 100"),
+			},
+		},
+		{
+			Qname: "naptr.example.com.", Qtype: dns.TypeNAPTR,
+			Answer: []dns.RR{
+				test.NAPTR("naptr.example.com. 300 IN NAPTR 100 10 \"u\" \"E2U+sip\" \"!^.*$!sip:info@example.com!\" ."),
 			},
 		},
 	},
